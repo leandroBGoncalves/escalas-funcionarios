@@ -18,6 +18,7 @@ const styles = {
       flexDirection: 'column',
       boxSizing: 'border-box',
       paddingBottom: 310,
+      alignItems: 'center',
     },
     header: {
       flexShrink: 0,
@@ -68,15 +69,18 @@ const styles = {
     tableWrapper: {
       flex: 1,
       minHeight: 910,
-      marginLeft: 50,
-      marginRight: 50,
       marginTop: 0,
       marginBottom: 0,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: '100%',
+      maxWidth: SCALE_WIDTH - 100,
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'column'
     },
     table: {
       flex: 1,
+      width: '100%',
       minHeight: 910,
       backgroundColor: '#fff',
       borderRadius: 40,

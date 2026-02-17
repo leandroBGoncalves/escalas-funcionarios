@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { toPng } from 'html-to-image'
 import ScalePreview from './components/ScalePreview'
 import EmployeeCard from './components/EmployeeCard'
+import InstallAppBanner from './components/InstallAppBanner'
+import { usePWAInstall } from './hooks/usePWAInstall'
 import {
   STORAGE_KEY,
   INITIAL_EMPLOYEES,
@@ -35,6 +37,7 @@ export default function App() {
   const [branchName, setBranchName] = useState(DEFAULT_BRANCH_NAME)
   const scaleRef = useRef(null)
   const [isGenerating, setIsGenerating] = useState(false)
+  const pwa = usePWAInstall()
 
   useEffect(() => {
     const saved = loadState()
@@ -122,8 +125,8 @@ export default function App() {
   }, [date, isGenerating])
 
   return (
-    <div className="min-h-screen bg-gray-100 pb-28 safe-bottom">
-      <header className="sticky top-0 z-20 bg-[#FFD700] border-b-2 border-[#E30613] shadow-md">
+    <div className="min-h-screen bg-gray-100 pb-20">
+      <header className="sticky top-0 z-20 bg-[#FFD700] border-b-2 border-[#E30613] shadow-md overflow-hidden">
         <div className="px-4 py-4">
           <label className="block">
             <span className="text-[#1D2B5B] font-bold block mb-2">Data da escala</span>
@@ -161,9 +164,21 @@ export default function App() {
             </button>
           </div>
         </div>
+        <div className="px-4 pb-3">
+          <InstallAppBanner
+            showBanner={pwa.showBanner}
+            handleDismiss={pwa.handleDismiss}
+            handleInstall={pwa.handleInstall}
+            showInstructions={pwa.showInstructions}
+            setShowInstructions={pwa.setShowInstructions}
+            isIOS={pwa.isIOS}
+            isInstallable={pwa.isInstallable}
+            installed={pwa.installed}
+          />
+        </div>
       </header>
 
-      <main className="px-4 py-6 max-w-lg mx-auto">
+      <main className="px-4 py-6 pb-58 max-w-lg mx-auto safe-bottom">
         <h2 className="text-[#1D2B5B] font-bold text-xl mb-4">Funcionários</h2>
         <div className="space-y-4">
           {employees.map((emp, i) => (
@@ -179,8 +194,8 @@ export default function App() {
 
         <section className="mt-8">
           <h2 className="text-[#1D2B5B] font-bold text-xl mb-3">Pré-visualização</h2>
-          <div className="overflow-auto rounded-2xl border-2 border-[#1D2B5B]/30 bg-[#FFD700] p-2 preview-scroll max-h-[440px] flex justify-center">
-            <div className="origin-top" style={{ transform: 'scale(0.26)', transformOrigin: 'top center' }}>
+          <div className="overflow-y-hidden overflow-x-hidden rounded-2xl border-2 border-[#1D2B5B]/30 bg-[#FFD700] p-2 max-h-[440px]">
+            <div className="origin-top max-w-full flex items-center justify-center" style={{ transform: 'scale(0.26)', transformOrigin: 'top center' }}>
               <ScalePreview date={date} employees={employees} branchName={branchName} />
             </div>
           </div>
@@ -202,12 +217,22 @@ export default function App() {
         <ScalePreview ref={scaleRef} date={date} employees={employees} branchName={branchName} />
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 z-30 p-4 safe-bottom bg-gradient-to-t from-gray-100 to-transparent">
+      <div className="fixed bottom-0 left-0 right-0 z-30 p-4 safe-bottom bg-gradient-to-t from-gray-100 to-transparent flex flex-row gap-2 items-stretch">
+        {!pwa.installed && (
+          <button
+            type="button"
+            onClick={pwa.handleInstall}
+            className="flex-[0_0_25%] py-4 rounded-2xl font-bold text-white bg-[#1D2B5B] shadow-lg active:opacity-90 md:hidden text-sm"
+            aria-label="Baixar aplicativo"
+          >
+            Baixar app
+          </button>
+        )}
         <button
           type="button"
           onClick={handleGerarImagem}
           disabled={isGenerating}
-          className="w-full py-4 rounded-2xl font-bold text-white bg-[#25D366] shadow-lg active:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed text-lg"
+          className={`py-4 rounded-2xl font-bold text-white bg-[#25D366] shadow-lg active:opacity-90 disabled:opacity-70 disabled:cursor-not-allowed text-lg ${pwa.installed ? 'w-full' : 'flex-1 min-w-0'}`}
         >
           {isGenerating ? 'Gerando…' : 'Gerar imagem para WhatsApp'}
         </button>
