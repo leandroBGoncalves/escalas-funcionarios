@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'logo-mister.png', 'escala-nasser.svg', 'icons/*.png'],
+      includeAssets: ['favicon.svg', 'logo-mister.png', 'escala-nasser.svg', 'icons/*.svg', 'icons/*.png'],
       manifest: {
         name: 'Escala de Trabalho - Padaria',
         short_name: 'Escala Padaria',
@@ -21,22 +21,22 @@ export default defineConfig({
         lang: 'pt-BR',
         icons: [
           {
-            src: '/icons/Gemini_Generated_Image_ixll5zixll5zixll.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'any',
-          },
-          {
-            src: '/icons/Gemini_Generated_Image_ixll5zixll5zixll.png',
-            sizes: '512x512',
-            type: 'image/png',
+            src: '/icons/icon_app.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
             purpose: 'any maskable',
           },
           {
-            src: '/favicon.svg',
-            sizes: 'any',
+            src: '/icons/icon_app.svg',
+            sizes: '192x192',
             type: 'image/svg+xml',
             purpose: 'any',
+          },
+          {
+            src: '/icons/icon_app.svg',
+            sizes: '512x512',
+            type: 'image/svg+xml',
+            purpose: 'any maskable',
           },
         ],
       },
