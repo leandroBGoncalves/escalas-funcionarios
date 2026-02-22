@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
 /* Evita que o teclado virtual empurre o layout de forma obstrutiva em mobile */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   .safe-bottom {

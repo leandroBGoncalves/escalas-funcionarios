@@ -15,7 +15,7 @@ export default function InstallAppBanner({
     <button
       type="button"
       onClick={handleInstall}
-      className="fixed left-4 bottom-28 z-20 hidden md:flex items-center gap-2 rounded-full border-2 border-[#1D2B5B] bg-[#25D366] px-3 py-2 text-sm font-bold text-white shadow-lg safe-bottom active:opacity-90 hover:bg-[#20c55e] transition-colors"
+      className="fixed left-4 bottom-28 z-20 hidden md:flex items-center gap-2 rounded-flowshift bg-flowshift-orange px-3 py-2 text-sm font-bold text-white shadow-flowshift-card safe-bottom active:opacity-90 hover:opacity-90 transition-opacity"
       title="Baixar app"
       aria-label="Baixar aplicativo"
     >
@@ -28,17 +28,17 @@ export default function InstallAppBanner({
       {/* Banner grande (só aparece se não dispensou) */}
       {showBanner && (
     <div
-      className="rounded-xl border-2 border-[#E30613] bg-white p-3 shadow-lg"
+      className="rounded-flowshift border border-flowshift-blue/30 bg-flowshift-card p-3 shadow-flowshift-card"
       role="region"
       aria-label="Instalar aplicativo"
     >
       <div className="flex items-start gap-3">
         <div
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#FFD700]"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-flowshift bg-flowshift-blue"
           aria-hidden
         >
           <svg
-            className="h-7 w-7 text-[#1D2B5B]"
+            className="h-7 w-7 text-white"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -52,7 +52,7 @@ export default function InstallAppBanner({
           </svg>
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="font-bold text-[#1D2B5B] text-base">📱 Baixe o app</h3>
+          <h3 className="font-bold text-flowshift-blue text-base">📱 Baixe o app</h3>
           <p className="mt-1 text-sm text-gray-700">
             {isIOS
               ? 'Toque em Compartilhar e depois em "Adicionar à Tela de Início" para usar na tela inicial e offline.'
@@ -62,14 +62,14 @@ export default function InstallAppBanner({
             <button
               type="button"
               onClick={handleInstall}
-              className="rounded-xl bg-[#25D366] px-5 py-2.5 font-bold text-white shadow-lg active:opacity-90 hover:bg-[#20c55e] transition-colors"
+              className="rounded-flowshift bg-flowshift-orange px-5 py-2.5 font-bold text-white shadow-flowshift-card active:opacity-90 hover:opacity-90 transition-opacity"
             >
               {isInstallable ? '📲 Instalar agora' : isIOS ? '📱 Como instalar' : '📲 Baixar app'}
             </button>
             <button
               type="button"
               onClick={handleDismiss}
-              className="rounded-xl border border-gray-300 bg-gray-100 px-3 py-2 text-sm font-medium text-gray-600 active:bg-gray-200"
+              className="rounded-flowshift border border-gray-300 bg-gray-100 px-3 py-2 text-sm font-medium text-gray-600 active:bg-gray-200"
               aria-label="Fechar"
             >
               Agora não
@@ -103,11 +103,11 @@ export default function InstallAppBanner({
           onClick={() => setShowInstructions?.(false)}
         >
           <div
-            className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+            className="w-full max-w-md rounded-flowshift bg-flowshift-card p-6 shadow-flowshift-card"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-xl font-bold text-[#1D2B5B]">
+              <h3 className="text-xl font-bold text-flowshift-blue">
                 {isIOS ? '📱 Instalar no iPhone/iPad' : '📲 Como instalar o app'}
               </h3>
               <button
@@ -152,7 +152,7 @@ export default function InstallAppBanner({
             <button
               type="button"
               onClick={() => setShowInstructions?.(false)}
-              className="mt-6 w-full rounded-xl bg-[#25D366] py-3 font-bold text-white shadow-lg active:opacity-90"
+              className="mt-6 w-full rounded-flowshift bg-flowshift-orange py-3 font-bold text-white shadow-flowshift-card active:opacity-90"
             >
               Entendi
             </button>
