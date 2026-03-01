@@ -71,6 +71,14 @@ export default function App() {
     )
   }, [])
 
+  const handleRemoverFolga = useCallback((index) => {
+    setEmployees((prev) =>
+      prev.map((emp, i) =>
+        i === index ? { ...emp, horario1: '', horario2: '' } : emp
+      )
+    )
+  }, [])
+
   const handleLimparTudo = useCallback(() => {
     setEmployees((prev) =>
       prev.map((emp) => ({ ...emp, horario1: '', horario2: '' }))
@@ -261,6 +269,7 @@ export default function App() {
               index={i}
               onChange={handleEmployeeChange}
               onFolga={handleFolga}
+              onRemoverFolga={handleRemoverFolga}
               onRemove={handleRemoveEmployee}
               canRemove={employees.length > 1}
             />

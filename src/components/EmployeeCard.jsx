@@ -19,13 +19,17 @@ function formatTimeRange(start, end) {
   return start || end
 }
 
-export default function EmployeeCard({ employee, index, onChange, onFolga, onRemove, canRemove }) {
+export default function EmployeeCard({ employee, index, onChange, onFolga, onRemoverFolga, onRemove, canRemove }) {
   const h1 = (employee.horario1 || '').trim().toUpperCase()
   const h2 = (employee.horario2 || '').trim().toUpperCase()
   const isFolga = h1 === FOLGA && h2 === FOLGA
 
   const handleFolga = () => {
     onFolga(index)
+  }
+
+  const handleRemoverFolga = () => {
+    onRemoverFolga?.(index)
   }
 
   const handleChange = (field, value) => {
@@ -159,13 +163,25 @@ export default function EmployeeCard({ employee, index, onChange, onFolga, onRem
         </div>
       </div>
 
-      <button
-        type="button"
-        onClick={handleFolga}
-        className="mt-4 w-full py-3 rounded-flowshift font-semibold text-flowshift-blue bg-gray-100 border border-gray-300 hover:bg-gray-200 active:bg-gray-300 transition-colors"
-      >
-        Folga
-      </button>
+      <div className="mt-4 flex gap-2">
+        {isFolga ? (
+          <button
+            type="button"
+            onClick={handleRemoverFolga}
+            className="flex-1 py-3 rounded-flowshift font-semibold text-white bg-flowshift-blue border border-flowshift-blue hover:opacity-90 active:opacity-90 transition-opacity"
+          >
+            Definir horários
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={handleFolga}
+            className="w-full py-3 rounded-flowshift font-semibold text-flowshift-blue bg-gray-100 border border-gray-300 hover:bg-gray-200 active:bg-gray-300 transition-colors"
+          >
+            Folga
+          </button>
+        )}
+      </div>
     </div>
   )
 }
