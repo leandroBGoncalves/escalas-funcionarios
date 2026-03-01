@@ -276,7 +276,7 @@ export default function App() {
 
         <section className="mt-8">
           <h2 className="text-flowshift-blue font-bold text-xl mb-3">Pré-visualização</h2>
-          <div className="overflow-y-hidden overflow-x-hidden rounded-flowshift bg-flowshift-card p-2 max-h-[440px] shadow-flowshift-card">
+          <div className="overflow-y-auto overflow-x-hidden rounded-flowshift bg-flowshift-card p-2 max-h-[440px] shadow-flowshift-card preview-scroll">
             <div className="origin-top max-w-full flex items-center justify-center" style={{ transform: 'scale(0.26)', transformOrigin: 'top center' }}>
               <ScalePreview date={date} employees={employees} branchName={branchName} sectorOrCompany={sectorOrCompany} scaleHeight={scaleHeight} />
             </div>
