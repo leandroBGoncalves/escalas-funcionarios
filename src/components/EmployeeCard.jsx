@@ -1,4 +1,5 @@
-import React, { useRef } from 'react'
+import React, { useState } from 'react'
+import TimePickerModal from './TimePickerModal'
 
 const FOLGA = 'FOLGA'
 
@@ -46,31 +47,42 @@ export default function EmployeeCard({ employee, index, onChange, onFolga, onRem
     handleChange('horario2', formatTimeRange(start, end))
   }
 
-  const timeRef1Start = useRef(null)
-  const timeRef1End = useRef(null)
-  const timeRef2Start = useRef(null)
-  const timeRef2End = useRef(null)
+  const [timePickerSlot, setTimePickerSlot] = useState(null)
 
-  const openTimePicker = (ref) => {
-    if (!ref?.current || isFolga) return
-    ref.current.focus()
-    if (typeof ref.current.showPicker === 'function') {
-      ref.current.showPicker()
-    }
+  const openTimePicker = (slot) => {
+    if (isFolga) return
+    setTimePickerSlot(slot)
   }
 
-  const inputTimeClass =
-    'w-full rounded-flowshift border border-gray-300 px-3 py-2.5 text-gray-900 focus:border-flowshift-blue focus:ring-2 focus:ring-flowshift-blue/20 focus:outline-none'
+  const getTimePickerValue = () => {
+    if (!timePickerSlot) return ''
+    if (timePickerSlot === 'h1Start') return horario1Range.start
+    if (timePickerSlot === 'h1End') return horario1Range.end
+    if (timePickerSlot === 'h2Start') return horario2Range.start
+    if (timePickerSlot === 'h2End') return horario2Range.end
+    return ''
+  }
+
+  const handleTimePickerConfirm = (value) => {
+    if (timePickerSlot === 'h1Start') handleHorario1Change(value, horario1Range.end)
+    if (timePickerSlot === 'h1End') handleHorario1Change(horario1Range.start, value)
+    if (timePickerSlot === 'h2Start') handleHorario2Change(value, horario2Range.end)
+    if (timePickerSlot === 'h2End') handleHorario2Change(horario2Range.start, value)
+    setTimePickerSlot(null)
+  }
+
+  const timeCellClass =
+    'flex flex-col cursor-pointer rounded-flowshift border border-gray-300 focus-within:ring-2 focus-within:ring-flowshift-blue/20 focus-within:border-flowshift-blue min-h-[44px] justify-center px-2 py-2 bg-white'
 
   return (
     <div
-      className={`rounded-flowshift border border-gray-200 p-4 shadow-flowshift-card transition-colors ${
+      className={`rounded-flowshift border border-gray-200 p-3 shadow-flowshift-card transition-colors ${
         isFolga
           ? 'bg-gray-200 border-gray-300'
           : 'bg-flowshift-card border-gray-200'
       }`}
     >
-      <div className="flex items-start justify-between gap-2 mb-2">
+      <div className="flex items-start justify-between gap-2 mb-1.5">
         <span className="text-sm font-medium text-gray-500">#{index + 1}</span>
         {canRemove && onRemove && (
           <button
@@ -83,7 +95,7 @@ export default function EmployeeCard({ employee, index, onChange, onFolga, onRem
           </button>
         )}
       </div>
-      <label className="block mb-4">
+      <label className="block mb-3">
         <span className="text-sm text-gray-600 block mb-1">Nome do colaborador</span>
         <input
           type="text"
@@ -94,81 +106,61 @@ export default function EmployeeCard({ employee, index, onChange, onFolga, onRem
         />
       </label>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         <div className="block">
-          <span className="text-sm text-gray-600 block mb-2">Horário 1</span>
-          <div className="grid grid-cols-2 gap-2">
-            <label
-              className="flex flex-col cursor-pointer rounded-flowshift border border-gray-300 focus-within:ring-2 focus-within:ring-flowshift-blue/20 focus-within:border-flowshift-blue"
-              onClick={(e) => { e.preventDefault(); openTimePicker(timeRef1Start) }}
+          <span className="text-sm text-gray-600 block mb-1.5">Horário 1</span>
+          <div className="grid grid-cols-2 gap-1.5">
+            <button
+              type="button"
+              onClick={() => openTimePicker('h1Start')}
+              disabled={isFolga}
+              className={`${timeCellClass} text-left ${isFolga ? 'opacity-60 cursor-not-allowed' : ''}`}
             >
-              <span className="text-xs text-gray-500 block mb-1 px-1 pt-2">De</span>
-              <input
-                ref={timeRef1Start}
-                type="time"
-                className={`${inputTimeClass} border-0 focus:ring-0 rounded-t-none`}
-                value={horario1Range.start}
-                onChange={(e) => handleHorario1Change(e.target.value, horario1Range.end)}
-                disabled={isFolga}
-              />
-            </label>
-            <label
-              className="flex flex-col cursor-pointer rounded-flowshift border border-gray-300 focus-within:ring-2 focus-within:ring-flowshift-blue/20 focus-within:border-flowshift-blue"
-              onClick={(e) => { e.preventDefault(); openTimePicker(timeRef1End) }}
+              <span className="text-xs text-gray-500">De</span>
+              <span className="text-sm font-medium text-gray-900">{horario1Range.start || '--:--'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => openTimePicker('h1End')}
+              disabled={isFolga}
+              className={`${timeCellClass} text-left ${isFolga ? 'opacity-60 cursor-not-allowed' : ''}`}
             >
-              <span className="text-xs text-gray-500 block mb-1 px-1 pt-2">Até</span>
-              <input
-                ref={timeRef1End}
-                type="time"
-                className={`${inputTimeClass} border-0 focus:ring-0 rounded-t-none`}
-                value={horario1Range.end}
-                onChange={(e) => handleHorario1Change(horario1Range.start, e.target.value)}
-                disabled={isFolga}
-              />
-            </label>
+              <span className="text-xs text-gray-500">Até</span>
+              <span className="text-sm font-medium text-gray-900">{horario1Range.end || '--:--'}</span>
+            </button>
           </div>
         </div>
         <div className="block">
-          <span className="text-sm text-gray-600 block mb-2">Horário 2</span>
-          <div className="grid grid-cols-2 gap-2">
-            <label
-              className="flex flex-col cursor-pointer rounded-flowshift border border-gray-300 focus-within:ring-2 focus-within:ring-flowshift-blue/20 focus-within:border-flowshift-blue"
-              onClick={(e) => { e.preventDefault(); openTimePicker(timeRef2Start) }}
+          <span className="text-sm text-gray-600 block mb-1.5">Horário 2</span>
+          <div className="grid grid-cols-2 gap-1.5">
+            <button
+              type="button"
+              onClick={() => openTimePicker('h2Start')}
+              disabled={isFolga}
+              className={`${timeCellClass} text-left ${isFolga ? 'opacity-60 cursor-not-allowed' : ''}`}
             >
-              <span className="text-xs text-gray-500 block mb-1 px-1 pt-2">De</span>
-              <input
-                ref={timeRef2Start}
-                type="time"
-                className={`${inputTimeClass} border-0 focus:ring-0 rounded-t-none`}
-                value={horario2Range.start}
-                onChange={(e) => handleHorario2Change(e.target.value, horario2Range.end)}
-                disabled={isFolga}
-              />
-            </label>
-            <label
-              className="flex flex-col cursor-pointer rounded-flowshift border border-gray-300 focus-within:ring-2 focus-within:ring-flowshift-blue/20 focus-within:border-flowshift-blue"
-              onClick={(e) => { e.preventDefault(); openTimePicker(timeRef2End) }}
+              <span className="text-xs text-gray-500">De</span>
+              <span className="text-sm font-medium text-gray-900">{horario2Range.start || '--:--'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => openTimePicker('h2End')}
+              disabled={isFolga}
+              className={`${timeCellClass} text-left ${isFolga ? 'opacity-60 cursor-not-allowed' : ''}`}
             >
-              <span className="text-xs text-gray-500 block mb-1 px-1 pt-2">Até</span>
-              <input
-                ref={timeRef2End}
-                type="time"
-                className={`${inputTimeClass} border-0 focus:ring-0 rounded-t-none`}
-                value={horario2Range.end}
-                onChange={(e) => handleHorario2Change(horario2Range.start, e.target.value)}
-                disabled={isFolga}
-              />
-            </label>
+              <span className="text-xs text-gray-500">Até</span>
+              <span className="text-sm font-medium text-gray-900">{horario2Range.end || '--:--'}</span>
+            </button>
           </div>
         </div>
       </div>
 
-      <div className="mt-4 flex gap-2">
+      <div className="mt-3 flex gap-1.5">
         {isFolga ? (
           <button
             type="button"
             onClick={handleRemoverFolga}
-            className="flex-1 py-3 rounded-flowshift font-semibold text-white bg-flowshift-blue border border-flowshift-blue hover:opacity-90 active:opacity-90 transition-opacity"
+            className="flex-1 min-h-[44px] py-2.5 rounded-flowshift font-semibold text-white bg-flowshift-blue border border-flowshift-blue hover:opacity-90 active:opacity-90 transition-opacity"
           >
             Definir horários
           </button>
@@ -176,12 +168,20 @@ export default function EmployeeCard({ employee, index, onChange, onFolga, onRem
           <button
             type="button"
             onClick={handleFolga}
-            className="w-full py-3 rounded-flowshift font-semibold text-flowshift-blue bg-gray-100 border border-gray-300 hover:bg-gray-200 active:bg-gray-300 transition-colors"
+            className="w-full min-h-[44px] py-2.5 rounded-flowshift font-semibold text-flowshift-blue bg-gray-100 border border-gray-300 hover:bg-gray-200 active:bg-gray-300 transition-colors"
           >
             Folga
           </button>
         )}
       </div>
+
+      {timePickerSlot && (
+        <TimePickerModal
+          value={getTimePickerValue()}
+          onConfirm={handleTimePickerConfirm}
+          onClose={() => setTimePickerSlot(null)}
+        />
+      )}
     </div>
   )
 }
